@@ -95,3 +95,98 @@ that direct check.
 
 The operator challenged the estimate. The agent counted the corpus and corrected
 the number to 72 in the immediate response.
+
+## Addendum: failure-name and causal analysis
+
+- Analysis date: 2026-09-03 (America/Los_Angeles)
+- Analyst: OpenAI Codex
+- Model: `gpt-5.6-sol`
+- Reasoning effort: `high`
+
+This addendum is a subsequent analysis of the accepted incident. It does not
+alter the incident's evidence, status, or primary classification.
+
+### Names at different levels
+
+The accepted taxonomy name, **direct-check omission**, is the narrowest
+behavioral classification supported by the record: the agent made a concrete,
+externally checkable claim despite having a cheap, authoritative check
+available.
+
+More incident-specific descriptive names include **unverified quantitative
+assertion** and **count-without-inventory failure**. These phrases describe the
+observable error without asserting an unobserved psychological mechanism.
+
+At a broader process level, this incident and its companion `AET-EM-0019` can
+be described as **insufficient state acquisition before decision-making** or
+**decision-before-inventory**. These are useful summaries of the shared process
+shape, not replacements for the two narrower taxonomy assignments.
+
+### Evidence-supported cause
+
+The record establishes one proximate cause: the agent estimated the number of
+thread documents instead of counting them. The agent's correction states that
+it had “low-balled it without counting.” The supported causal chain is:
+
+```text
+No inventory performed
+        ↓
+Plausible estimate substituted
+        ↓
+“~30 existing thread docs”
+        ↓
+Migration scope understated
+```
+
+The transcript does not establish why the agent chose not to count. In
+particular, it does not justify attributing the behavior to laziness, anchoring,
+or another internal cognitive mechanism. Such claims would reconstruct hidden
+reasoning that the retained source does not contain.
+
+### Plausible but unconfirmed contributing mechanisms
+
+The following explanations are hypotheses suggested by the behavior, not
+findings established by this incident:
+
+- **Premature epistemic closure:** the agent may have accepted a plausible
+  quantity before acquiring readily available evidence.
+- **Generation substituted for measurement:** the agent produced a repository
+  fact from its synthesized representation instead of querying repository
+  state.
+- **Missing tool-use trigger:** the workflow did not reliably map a quantitative
+  repository claim to a required inventory command.
+- **Plausibility treated as sufficient precision:** the approximate number may
+  have appeared rhetorically adequate even though it supported an implementation
+  decision.
+- **Decision-before-inventory:** the migration policy was formed before the
+  affected corpus and its provenance surfaces were inspected.
+- **Weak uncertainty signaling:** if the number was intentionally an estimate,
+  the response did not disclose that it was uncounted or prevent it from
+  supporting the no-backfill decision.
+
+### Relationship to the companion incident
+
+The same response contains a second, independently classified error. In
+`AET-EM-0019`, the agent declared that historical session URLs could not be
+backfilled without guessing. Inspection subsequently found a mechanical
+derivation through capture commits, session trailers, and PR bodies.
+
+The two claims therefore had different failure types and missing operations:
+
+| Claim | Failure type | Missing operation |
+|---|---|---|
+| “~30 existing thread docs” | Direct-check omission | Count the files |
+| “Backfill would mean guessing” | Evidence-scope omission | Inspect commits, trailers, and PR bodies |
+
+The count error did not by itself establish the unrecoverability error, so the
+records appropriately remain separate. Their shared higher-level pattern is
+that the agent formed a plan from a synthesized picture of repository state
+before constructing an observed picture of that state.
+
+### Prevention implication
+
+A practical control suggested by this analysis is to require an inventory
+operation before a claim about quantity, absence, completeness, or
+recoverability is allowed to support a decision. For this incident, the minimal
+control was a direct file count followed by explicit disclosure of the counted
+scope and repository snapshot.
